@@ -4,6 +4,7 @@ import java.awt.Graphics;
 import java.awt.Image;
 import videogame.GameModel;
 import videogame.graphics.Assets;
+import videogame.states.GameState;
 
 /**
  *
@@ -14,9 +15,9 @@ public class Enemy extends Creature{
     private int health;
     
     public Enemy(double x, double y, int type) {
-        super(x, y, Creature.DEFAULT_CREATURE_WIDTH, Creature.DEFAULT_CREATURE_HEIGHT);
+        super(x, y, 50, 50);
         health = DEFAULT_HEALTH;
-        speed = 2;
+        speed = 4;
         /**
          * if type == 3:
          *      speed = 10
@@ -56,5 +57,9 @@ public class Enemy extends Creature{
     
     public void setHealth(int h){
         health = h;
+    }
+
+    public void shoot() {
+        GameState.getEnemiesBullets().add(new Bullet(x, y, 1));
     }
 }

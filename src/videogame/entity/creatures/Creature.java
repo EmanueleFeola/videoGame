@@ -9,7 +9,7 @@ import videogame.entity.Entity;
  * @author Emanuele Feola
  */
 public abstract class Creature extends Entity{
-    public static final int DEFAULT_SPEED = 3;
+    public static final int DEFAULT_SPEED = 6;
     public static final int DEFAULT_CREATURE_WIDTH = 75;
     public static final int DEFAULT_CREATURE_HEIGHT = 75;
     public static final int DEFAULT_HEALTH = 10;
@@ -27,7 +27,7 @@ public abstract class Creature extends Entity{
     
     public void move(){
         if(x + width + xMove <= GameModel.getWIDTH() && x + xMove >= 0) x += xMove;
-        if(y + yMove >= 0 && y + height + yMove <= GameModel.getHEIGHT()) y += yMove;
+        if(y + yMove >= 0 && y + 90 + yMove <= GameModel.getHEIGHT()) y += yMove;
     }
 
     public int getSpeed() {

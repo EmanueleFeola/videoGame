@@ -13,7 +13,7 @@ public class Player extends Creature{
     private int health;
         
     public Player(double x, double y) {
-        super(x, y, Creature.DEFAULT_CREATURE_WIDTH, Creature.DEFAULT_CREATURE_HEIGHT);
+        super(x, y, 50, 50);
         health = DEFAULT_HEALTH;
     }
 

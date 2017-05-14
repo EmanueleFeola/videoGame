@@ -30,8 +30,4 @@ public abstract class Entity {
     public int getHeight() {
         return height;
     }
-    
-    public Rectangle getBounds(){
-        return new Rectangle(x, y, width, height);
-    }
 }
