@@ -3,6 +3,7 @@ package videogame.input;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.util.ArrayList;
+import videogame.GameModel;
 
 /**
  *
@@ -29,7 +30,7 @@ public class KeyManager implements KeyListener{
     @Override
     public void keyPressed(KeyEvent e) {
         keys[e.getKeyCode()] = true;
-        System.out.println("Pressed");
+        if(GameModel.isBooldebug()) System.out.println("Pressed");
     }
 
     @Override

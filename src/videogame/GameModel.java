@@ -8,12 +8,16 @@ import videogame.graphics.Assets;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Image;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.awt.image.BufferStrategy;
 import java.awt.image.BufferedImage;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.Spring;
 import videogame.input.KeyManager;
+import videogame.input.MouseManager;
 
 /**
  *
@@ -23,9 +27,10 @@ import videogame.input.KeyManager;
 public class GameModel implements Runnable{
     private static boolean booldebug = false;
     private KeyManager keyManager;
+    private MouseManager mouseManager;
     
-    private static int width;
-    private static int height;
+    private static int WIDTH;
+    private static int HEIGHT;
     private MainWindow mainWindow;
     
     private Thread thread;
@@ -40,9 +45,10 @@ public class GameModel implements Runnable{
     private GameState gameState;
     
     public GameModel(int width, int height){
-        this.width = width;
-        this.height = height;
+        this.WIDTH = width;
+        this.HEIGHT = height;
         keyManager =  new KeyManager();
+        mouseManager = new MouseManager();
         start();
     }
     
@@ -50,8 +56,9 @@ public class GameModel implements Runnable{
      * method thats initialize the window, it is called once
      */
     public void init(){
-        mainWindow = new MainWindow(width, height);
+        mainWindow = new MainWindow(WIDTH, HEIGHT);
         mainWindow.addKeyListener(keyManager);
+        mainWindow.getCanvas().addMouseListener(mouseManager);
         Assets.init();
         gameState = new GameState();
         State.setState(gameState);
@@ -75,12 +82,11 @@ public class GameModel implements Runnable{
             return;
         }
         g = bufferStrategy.getDrawGraphics();
-        g.clearRect(0, 0, width, height);
+        g.clearRect(0, 0, WIDTH, HEIGHT);
         g.setColor(Color.white);
-        g.fillRect(0, 0, width, height);
+        g.fillRect(0, 0, WIDTH, HEIGHT);
         
         //start drawing
-        //g.drawImage((Image) Assets.getUserShips().get(6), width/2-40, height-150, null);
         if(State.getState() != null) State.getState().render(g);
         //finishing drawing
         
@@ -139,11 +145,15 @@ public class GameModel implements Runnable{
         }
     }
 
-    public static int getWidth() {
-        return width;
+    public static int getWIDTH() {
+        return WIDTH;
     }
 
-    public static int getHeight() {
-        return height;
+    public static int getHEIGHT() {
+        return HEIGHT;
+    }
+    
+    public static boolean isBooldebug(){
+        return booldebug;
     }
 }
