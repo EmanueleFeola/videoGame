@@ -17,7 +17,7 @@ public class Enemy extends Creature{
     public Enemy(double x, double y, int type) {
         super(x, y, 50, 50);
         health = DEFAULT_HEALTH;
-        speed = 4;
+        speed = 2;
         /**
          * if type == 3:
          *      speed = 10
@@ -40,7 +40,7 @@ public class Enemy extends Creature{
     public void update() {
         xMove = 0;
         yMove = speed;
-        move();
+        moveEnemy();
     }
 
     @Override

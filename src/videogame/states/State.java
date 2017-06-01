@@ -1,6 +1,7 @@
 package videogame.states;
 
 import java.awt.Graphics;
+import java.awt.image.BufferedImage;
 
 /**
  *
@@ -19,4 +20,5 @@ public abstract class State {
     
     public abstract void update();
     public abstract void render(Graphics g);
+    public abstract BufferedImage getBackground();
 }

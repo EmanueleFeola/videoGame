@@ -83,9 +83,9 @@ public class GameModel implements Runnable{
         }
         g = bufferStrategy.getDrawGraphics();
         g.clearRect(0, 0, WIDTH, HEIGHT);
-        g.setColor(Color.white);
-        g.fillRect(0, 0, WIDTH, HEIGHT);
-        
+        //g.setColor(Color.white);
+        //g.fillRect(0, 0, WIDTH, HEIGHT);
+        if(State.getState() != null) g.drawImage(State.getState().getBackground(), 0, 0, null);
         //start drawing
         if(State.getState() != null) State.getState().render(g);
         //finishing drawing

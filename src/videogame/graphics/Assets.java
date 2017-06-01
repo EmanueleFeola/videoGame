@@ -8,6 +8,10 @@ import java.util.ArrayList;
  * @author Emanuele Feola
  */
 public class Assets {
+    //load background
+    private static BufferedImage background;
+    
+    
     //load user's ships
     private static ArrayList<BufferedImage> userShips = new ArrayList<>();
     private static int userShipsWidthPixel = 80;
@@ -27,16 +31,17 @@ public class Assets {
     private static BufferedImage explosion;
     
     public static void init(){
-        SpriteSheet userShipsImage = new SpriteSheet(ImageLoader.imageLoader("C:\\Users\\Emanuele Feola\\Desktop\\userShips.png"));
+        bullet = ImageLoader.imageLoader("C:\\Work\\images\\c.png");
+        explosion = ImageLoader.imageLoader("C:\\Work\\images\\ex.png");
+        background = ImageLoader.imageLoader("C:\\Work\\images\\bg.png");
+        
+        SpriteSheet userShipsImage = new SpriteSheet(ImageLoader.imageLoader("C:\\Work\\images\\userShips.png"));
         for(int x = 0; x < userShipsNumbers*userShipsWidthPixel;){
             userShips.add(userShipsImage.crop(x, 0, userShipsWidthPixel, userShipsHeightPixel));
             x += userShipsWidthPixel;
         }
-        
-        bullet = ImageLoader.imageLoader("C:\\Users\\Emanuele Feola\\Desktop\\c.png");
-        explosion = ImageLoader.imageLoader("C:\\Users\\Emanuele Feola\\Desktop\\ex.png");
                 
-        SpriteSheet enemyShipsImage = new SpriteSheet(ImageLoader.imageLoader("C:\\Users\\Emanuele Feola\\Desktop\\enemyes.png"));
+        SpriteSheet enemyShipsImage = new SpriteSheet(ImageLoader.imageLoader("C:\\Work\\images\\enemyes.png"));
         for(int x = 0; x < enemyShipsNumbers*enemyShipsWidthPixel;){
             enemiesShips.add(enemyShipsImage.crop(x, 0, enemyShipsWidthPixel, enemyShipsHeightPixel));
             x += enemyShipsWidthPixel;
@@ -53,6 +58,10 @@ public class Assets {
     
     public static BufferedImage getExplosion(){
         return explosion;
+    }
+    
+    public static BufferedImage getBackground(){
+        return background;
     }
     
     public static ArrayList getEnemyShips(){

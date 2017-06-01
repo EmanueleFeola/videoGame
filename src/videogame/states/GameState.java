@@ -3,6 +3,7 @@ package videogame.states;
 import videogame.graphics.Assets;
 import java.awt.Graphics;
 import java.awt.Image;
+import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import videogame.GameModel;
 import videogame.entity.Explosion;
@@ -16,13 +17,14 @@ import videogame.entity.creatures.Player;
  * @author Emanuele Feola
  */
 public class GameState extends State {
-
     private static ArrayList<Bullet> userBullets;
     private static ArrayList<Bullet> enemiesBullets;
     private static ArrayList<Enemy> enemies;
     private static ArrayList<Explosion> explosions;
     private static Player player;
-    //private static Enemy enemy = new Enemy(Math.random() * GameModel.getWIDTH()/2 + GameModel.getWIDTH()/4, 50, 0);;
+    private static int levelNumber = 1;
+    private static int enemiesNumber = 0;
+    private static int enemiesForRow = 5;
 
     public GameState() {
         userBullets = new ArrayList();
@@ -30,17 +32,22 @@ public class GameState extends State {
         enemies = new ArrayList();
         explosions = new ArrayList();
         initPlayer();
-        initEnemies();
-        //initLevel();
+        initEnemies(enemiesNumber);
     }
 
     public void initPlayer() {
         player = new Player(GameModel.getWIDTH() / 2 - 40, GameModel.getHEIGHT() - 150);
     }
-
-    public void initEnemies() {
-        for (int x = 0; x < 5; x++) {
-            enemies.add(new Enemy((int) (Math.random() * GameModel.getWIDTH()), 0, 0));
+// full screen (set...)
+    
+    public void initEnemies(int enemiesNumber) {
+        int y = 0;
+        for(int cont = 0; cont < enemiesNumber/enemiesForRow; cont++){
+            for(int x = 100; x < enemiesForRow*50+100; ) {
+                enemies.add(new Enemy((int) x , y, 0));
+                x += 50;
+            }
+            y += 50;
         }
     }
 
@@ -75,7 +82,7 @@ public class GameState extends State {
     public void explosionsUpdate() {
         if (!explosions.isEmpty()) {
             for (int n = explosions.size() - 1; n > -1; n--) { // Traverse the array in reverse order otherwise an esception is thrown
-                if (explosions.get(n).getTime() < 60) {
+                if (explosions.get(n).getTime() < 30) {
                     explosions.get(n).update();
                 } else {
                     explosions.remove(n);
@@ -100,6 +107,11 @@ public class GameState extends State {
         userBulletsUpdate();
         explosionsUpdate();
         enemiesBulletsUpdate();
+        if(enemies.isEmpty()){
+            levelNumber++;
+            enemiesNumber += enemiesForRow;
+            initEnemies(enemiesNumber);
+        }
     }
 
     @Override
@@ -147,5 +159,10 @@ public class GameState extends State {
 
     public static ArrayList<Bullet> getEnemiesBullets() {
         return enemiesBullets;
+    }
+    
+    @Override
+    public BufferedImage getBackground(){
+        return Assets.getBackground();
     }
 }
