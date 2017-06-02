@@ -10,12 +10,14 @@ import videogame.graphics.ImageLoader;
  * @author Emanuele Feola
  */
 public class Bullet extends Creature{
+    private static int bulletWidth = 12;
+    private static int bulletHeight = 12;
     private int bulletSpeed = 8;
     private boolean hitTarget =  false;
     private int type = 0;
     
     public Bullet(double x, double y) {
-        super(x, y, Creature.DEFAULT_CREATURE_WIDTH, Creature.DEFAULT_CREATURE_HEIGHT);
+        super(x, y, bulletWidth, bulletHeight);
         speed = bulletSpeed;
     }
     
@@ -34,7 +36,7 @@ public class Bullet extends Creature{
 
     @Override
     public void render(Graphics g) {
-        g.drawImage(Assets.getBullet(), (int)x, (int)y, 20, 20, null);
+        g.drawImage(Assets.getBullet(), (int)x, (int)y, width, height, null);
     }
     
     public double getX(){

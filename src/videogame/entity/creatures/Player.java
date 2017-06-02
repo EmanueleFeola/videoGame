@@ -10,11 +10,13 @@ import videogame.input.KeyManager;
  * @author Emanuele Feola
  */
 public class Player extends Creature{
-    private int health;
+    private static int playerWidth = 50;
+    private static int playerHeight = 50;
+    private static int health;
         
     public Player(double x, double y) {
-        super(x, y, 50, 50);
-        health = DEFAULT_HEALTH;
+        super(x, y, playerWidth, playerHeight);
+        health = Creature.DEFAULT_HEALTH;
     }
 
     @Override
@@ -44,5 +46,21 @@ public class Player extends Creature{
 
     public double getY() {
         return y;
+    }
+    
+    public void setHealth(int h){
+        health = h;
+    }
+    
+    public static int getHealth(){
+        return health;
+    }
+    
+    public void setX(int x){
+        this.x = x;
+    }
+    
+    public void setY(int y){
+        this.y = y;
     }
 }

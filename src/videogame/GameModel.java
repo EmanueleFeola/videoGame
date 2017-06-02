@@ -6,6 +6,7 @@ import videogame.windows.MainWindow;
 import videogame.graphics.SpriteSheet;
 import videogame.graphics.Assets;
 import java.awt.Color;
+import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.event.MouseAdapter;
@@ -16,8 +17,11 @@ import java.awt.image.BufferedImage;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.Spring;
+import videogame.entity.creatures.Player;
+import videogame.input.ButtonManager;
 import videogame.input.KeyManager;
 import videogame.input.MouseManager;
+import videogame.windows.StartMenu;
 
 /**
  *
@@ -28,10 +32,13 @@ public class GameModel implements Runnable{
     private static boolean booldebug = false;
     private KeyManager keyManager;
     private MouseManager mouseManager;
+    private ButtonManager buttonManager;
     
     private static int WIDTH;
     private static int HEIGHT;
+    
     private MainWindow mainWindow;
+    private StartMenu startMenu;
     
     private Thread thread;
     private boolean running = false;
@@ -47,20 +54,28 @@ public class GameModel implements Runnable{
     public GameModel(int width, int height){
         this.WIDTH = width;
         this.HEIGHT = height;
+        
         keyManager =  new KeyManager();
         mouseManager = new MouseManager();
-        start();
+        
+        startWindow();
     }
     
     /**
      * method thats initialize the window, it is called once
      */
+    public void startWindow(){
+        startMenu = new StartMenu();
+        buttonManager = new ButtonManager(this, startMenu);
+        startMenu.getButton().addActionListener(buttonManager);
+    }
+    
     public void init(){
         mainWindow = new MainWindow(WIDTH, HEIGHT);
         mainWindow.addKeyListener(keyManager);
         mainWindow.getCanvas().addMouseListener(mouseManager);
         Assets.init();
-        gameState = new GameState();
+        gameState = new GameState(mainWindow);
         State.setState(gameState);
     }
     
@@ -81,12 +96,19 @@ public class GameModel implements Runnable{
             mainWindow.getCanvas().createBufferStrategy(3); //3 is the number of buffers, 3 is ok
             return;
         }
+                     
         g = bufferStrategy.getDrawGraphics();
         g.clearRect(0, 0, WIDTH, HEIGHT);
         //g.setColor(Color.white);
         //g.fillRect(0, 0, WIDTH, HEIGHT);
         if(State.getState() != null) g.drawImage(State.getState().getBackground(), 0, 0, null);
         //start drawing
+        //Font font = g.getFont().deriveFont(20.0f);
+        g.setColor(Color.white);
+        g.setFont(new Font("TimesRoman", Font.PLAIN, 25));    
+        g.drawString("Vite: " + Player.getHealth(), 10 , 25);
+        g.drawString("Punteggio : " + GameState.getPoints(), 10 , 50);
+        //g.drawStr
         if(State.getState() != null) State.getState().render(g);
         //finishing drawing
         
@@ -95,7 +117,7 @@ public class GameModel implements Runnable{
    }
 
     @Override
-    public void run() {        
+    public void run() {   
         init();
         
         int  fps = 60;

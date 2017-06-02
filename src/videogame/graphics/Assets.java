@@ -24,24 +24,24 @@ public class Assets {
     //load enemy's ships
     private static ArrayList<BufferedImage> enemiesShips = new ArrayList<>();
     private static int enemyShipsWidthPixel = 15;
-    private static int enemyShipsHeightPixel = 17;
+    private static int enemyShipsHeightPixel = 15;
     private static int enemyShipsNumbers = 8; 
     
     //load explosion
     private static BufferedImage explosion;
     
     public static void init(){
-        bullet = ImageLoader.imageLoader("C:\\Work\\images\\c.png");
-        explosion = ImageLoader.imageLoader("C:\\Work\\images\\ex.png");
-        background = ImageLoader.imageLoader("C:\\Work\\images\\bg.png");
+        bullet = ImageLoader.imageLoader("images\\bullet.png");
+        explosion = ImageLoader.imageLoader("images\\explosion.png");
+        background = ImageLoader.imageLoader("images\\bg.png");
         
-        SpriteSheet userShipsImage = new SpriteSheet(ImageLoader.imageLoader("C:\\Work\\images\\userShips.png"));
+        SpriteSheet userShipsImage = new SpriteSheet(ImageLoader.imageLoader("images\\userShips.png"));
         for(int x = 0; x < userShipsNumbers*userShipsWidthPixel;){
             userShips.add(userShipsImage.crop(x, 0, userShipsWidthPixel, userShipsHeightPixel));
             x += userShipsWidthPixel;
         }
                 
-        SpriteSheet enemyShipsImage = new SpriteSheet(ImageLoader.imageLoader("C:\\Work\\images\\enemyes.png"));
+        SpriteSheet enemyShipsImage = new SpriteSheet(ImageLoader.imageLoader("images\\enemyes.png"));
         for(int x = 0; x < enemyShipsNumbers*enemyShipsWidthPixel;){
             enemiesShips.add(enemyShipsImage.crop(x, 0, enemyShipsWidthPixel, enemyShipsHeightPixel));
             x += enemyShipsWidthPixel;

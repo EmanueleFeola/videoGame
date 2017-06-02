@@ -11,11 +11,13 @@ import videogame.states.GameState;
  * @author Emanuele Feola
  */
 public class Enemy extends Creature{
+    private static int enemyWidth = 50;
+    private static int enemyHeight = 50;
     private int type;
     private int health;
     
     public Enemy(double x, double y, int type) {
-        super(x, y, 50, 50);
+        super(x, y, enemyWidth, enemyHeight);
         health = DEFAULT_HEALTH;
         speed = 2;
         /**
@@ -57,6 +59,14 @@ public class Enemy extends Creature{
     
     public void setHealth(int h){
         health = h;
+    }
+
+    public static int getEnemyWidth() {
+        return enemyWidth;
+    }
+
+    public static int getEnemyHeight() {
+        return enemyHeight;
     }
 
     public void shoot() {

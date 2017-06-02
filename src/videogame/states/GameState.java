@@ -5,18 +5,21 @@ import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
+import javax.swing.JFrame;
 import videogame.GameModel;
 import videogame.entity.Explosion;
 import videogame.entity.creatures.Bullet;
 import videogame.entity.creatures.Creature;
 import videogame.entity.creatures.Enemy;
 import videogame.entity.creatures.Player;
+import videogame.windows.GameOver;
 
 /**
  *
  * @author Emanuele Feola
  */
 public class GameState extends State {
+    private JFrame window;
     private static ArrayList<Bullet> userBullets;
     private static ArrayList<Bullet> enemiesBullets;
     private static ArrayList<Enemy> enemies;
@@ -25,8 +28,12 @@ public class GameState extends State {
     private static int levelNumber = 1;
     private static int enemiesNumber = 0;
     private static int enemiesForRow = 5;
+    private int fpsAfterGameOver = 60;
+    private int contFpsAfterGameOver = 0;
+    private static int points = 0;
 
-    public GameState() {
+    public GameState(JFrame window) {
+        this.window = window;
         userBullets = new ArrayList();
         enemiesBullets = new ArrayList();
         enemies = new ArrayList();
@@ -38,7 +45,6 @@ public class GameState extends State {
     public void initPlayer() {
         player = new Player(GameModel.getWIDTH() / 2 - 40, GameModel.getHEIGHT() - 150);
     }
-// full screen (set...)
     
     public void initEnemies(int enemiesNumber) {
         int y = 0;
@@ -59,6 +65,7 @@ public class GameState extends State {
                     enemies.get(n).update();
                 } else {
                     if (enemies.get(n).getHealth() <= 0) {
+                        points++;
                         explosions.add(new Explosion(enemies.get(n).getX(), enemies.get(n).getY()));
                     }
                     enemies.remove(n);
@@ -66,7 +73,23 @@ public class GameState extends State {
             }
         }
     }
-
+    
+    public void playerUpdate() {
+        if (player.getHealth() > 0){
+                    player.update();
+        } else{
+            explosions.add(new Explosion(player.getX(), player.getY()));
+            player.setX(1000);
+            player.setY(1000);
+            if(contFpsAfterGameOver >= fpsAfterGameOver){
+                window.dispose();
+                GameOver.getGameOver();
+            }
+            else contFpsAfterGameOver++;
+            
+        }
+    }
+    
     public void userBulletsUpdate() {
         if (!userBullets.isEmpty()) {
             for (int n = userBullets.size() - 1; n > -1; n--) { // Traverse the array in reverse order otherwise an esception is thrown
@@ -102,7 +125,7 @@ public class GameState extends State {
     @Override
     public void update() {
         checkCollisions();
-        player.update();
+        playerUpdate();
         enemiesUpdate();
         userBulletsUpdate();
         explosionsUpdate();
@@ -138,12 +161,20 @@ public class GameState extends State {
     }
 
     public void checkCollisions() {
+        for (Enemy enemy : enemies) {
+        if(player.getX() >= enemy.getX() && player.getX() <= enemy.getX() + enemy.getHeight()){
+                    if(player.getY() >= enemy.getY() && player.getY() <= enemy.getY() + enemy.getWidth()){
+                        player.setHealth(0);
+                    }
+                }
+        } 
         for (Bullet bullet : userBullets) {
             for (Enemy enemy : enemies) {
-                if (enemy.getX() + enemy.getWidth() >= bullet.getX() && enemy.getX() <= bullet.getX() + bullet.getWidth() && enemy.getY() + enemy.getHeight() >= bullet.getY() && enemy.getY() <= bullet.getY() + bullet.getY()) {
-                    bullet.setHitTarget(true);
-                    enemy.setHealth(enemy.getHealth() - 5);
-                    //punteggio++;
+                if(bullet.getX() >= enemy.getX() && bullet.getX() <= enemy.getX() + enemy.getHeight()){
+                    if(bullet.getY() >= enemy.getY() && bullet.getY() <= enemy.getY() + enemy.getWidth()){
+                        bullet.setHitTarget(true);
+                        enemy.setHealth(enemy.getHealth() - 5);
+                    }
                 }
             }
         }
@@ -164,5 +195,9 @@ public class GameState extends State {
     @Override
     public BufferedImage getBackground(){
         return Assets.getBackground();
+    }
+    
+    public static int getPoints(){
+        return points;
     }
 }
