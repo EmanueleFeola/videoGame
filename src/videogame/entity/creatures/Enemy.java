@@ -18,16 +18,15 @@ public class Enemy extends Creature{
     
     public Enemy(double x, double y, int type) {
         super(x, y, enemyWidth, enemyHeight);
-        health = DEFAULT_HEALTH;
-        speed = 2;
-        /**
-         * if type == 3:
-         *      speed = 10
-         * if type == 2:
-         *      speed = 5
-         *      health = 2
-         * 
-         */
+        this.type = type;
+        if(type == 1 || type == 3){
+            health = 10;
+            speed = 2;
+        }
+        if(type == 2 || type == 4){
+            health = 5;
+            speed = 3;
+        }
     }
 
     public int getType() {
@@ -47,7 +46,7 @@ public class Enemy extends Creature{
 
     @Override
     public void render(Graphics g) {
-        g.drawImage((Image) Assets.getEnemyShips().get(0), (int)x, (int)y, width, height, null);
+        g.drawImage((Image) Assets.getEnemyShips().get(type-1), (int)x, (int)y, width, height, null);
     }
     public double getX() {
         return x;

@@ -2,6 +2,7 @@ package videogame.windows;
 
 import java.awt.BorderLayout;
 import java.awt.CardLayout;
+import java.awt.Color;
 import java.awt.FlowLayout;
 import java.awt.GridLayout;
 import javax.swing.ImageIcon;
@@ -9,6 +10,7 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JTextField;
 import videogame.GameModel;
 
 /**
@@ -17,11 +19,13 @@ import videogame.GameModel;
  */
 public class StartMenu extends JFrame{
     private JPanel panel;
-    JLabel background = new JLabel(new ImageIcon("images\\bg.png")); 
+    //JLabel background = new JLabel(new ImageIcon("images\\bg.png")); 
     private JLabel title = new JLabel("PRESS START TO PLAY");
+    private JTextField nameField = new JTextField("PlayerName");
     private JButton start = new JButton("Start");
-    private JButton settings =  new JButton("Settings");
-    private JButton last =  new JButton("Last");
+    private JButton ranking =  new JButton("Ranking");
+    private JButton exit =  new JButton("Exit");
+    private String name;
     
     public StartMenu(){
         initButtons();
@@ -29,8 +33,8 @@ public class StartMenu extends JFrame{
     }
     
     public void initGui(){
-        //setContentPane(background);
         setLayout(new FlowLayout());
+        //getContentPane().setBackground(Color.black);
         setTitle("VideoGame");
         setResizable(false);
         setSize(GameModel.getWIDTH(), GameModel.getHEIGHT());
@@ -40,19 +44,36 @@ public class StartMenu extends JFrame{
     }
     
     public void initButtons(){
-        panel = new JPanel(new GridLayout(4, 1, 100, 100));
+        start.setActionCommand("start");
+        ranking.setActionCommand("ranking");
+        exit.setActionCommand("exit");
+        panel = new JPanel(new GridLayout(5, 1, 100, 100));
+        //panel.setBackground(Color.black);
         panel.add(title);
+        panel.add(nameField);
         panel.add(start);
-        panel.add(settings);
-        panel.add(last);
-        //background.add(panel);
+        panel.add(ranking);
+        panel.add(exit);
         getContentPane().add(panel);
-        //background.setLayout(new GridLayout(4, 4));
-        //background.add(start);
-        //background.add(settings);
     }
     
-    public JButton getButton(){
+    public JButton getStartButton(){
         return start;
+    }
+    
+    public JButton getRankingButton(){
+        return ranking;
+    }
+    
+    public JButton getExitButton(){
+        return exit;
+    }
+    
+    public JTextField getNameField(){
+        return nameField;
+    }
+    
+    public void setName(String name){
+        this.name = name;
     }
 }

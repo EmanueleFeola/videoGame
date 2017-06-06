@@ -3,6 +3,7 @@ package videogame.entity.creatures;
 import java.awt.Graphics;
 import videogame.GameModel;
 import videogame.entity.Entity;
+import videogame.states.GameState;
 
 /**
  *
@@ -43,7 +44,9 @@ public abstract class Creature extends Entity{
             else x += xMove;
         } 
         
-        if(y + yMove >= 0 && y + 90 + yMove <= GameModel.getHEIGHT()) y += yMove;
+        if(y + yMove >= 0 && y + 90 + yMove <= GameModel.getHEIGHT()){
+            y += yMove;
+        }
         countEnemyMove += 1;
     }
 

@@ -5,6 +5,7 @@ import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
+import java.util.Random;
 import javax.swing.JFrame;
 import videogame.GameModel;
 import videogame.entity.Explosion;
@@ -13,6 +14,7 @@ import videogame.entity.creatures.Creature;
 import videogame.entity.creatures.Enemy;
 import videogame.entity.creatures.Player;
 import videogame.windows.GameOver;
+import videogame.windows.StartMenu;
 
 /**
  *
@@ -31,6 +33,8 @@ public class GameState extends State {
     private int fpsAfterGameOver = 60;
     private int contFpsAfterGameOver = 0;
     private static int points = 0;
+    private static int stationHealth = 100;
+    private boolean isOver = false;
 
     public GameState(JFrame window) {
         this.window = window;
@@ -39,22 +43,11 @@ public class GameState extends State {
         enemies = new ArrayList();
         explosions = new ArrayList();
         initPlayer();
-        initEnemies(enemiesNumber);
+        initLevel(enemiesNumber, 0);
     }
 
     public void initPlayer() {
         player = new Player(GameModel.getWIDTH() / 2 - 40, GameModel.getHEIGHT() - 150);
-    }
-    
-    public void initEnemies(int enemiesNumber) {
-        int y = 0;
-        for(int cont = 0; cont < enemiesNumber/enemiesForRow; cont++){
-            for(int x = 100; x < enemiesForRow*50+100; ) {
-                enemies.add(new Enemy((int) x , y, 0));
-                x += 50;
-            }
-            y += 50;
-        }
     }
 
     public void enemiesUpdate() {
@@ -67,6 +60,8 @@ public class GameState extends State {
                     if (enemies.get(n).getHealth() <= 0) {
                         points++;
                         explosions.add(new Explosion(enemies.get(n).getX(), enemies.get(n).getY()));
+                    }else{
+                        GameState.setHealth(GameState.getHealth()-5);
                     }
                     enemies.remove(n);
                 }
@@ -81,13 +76,18 @@ public class GameState extends State {
             explosions.add(new Explosion(player.getX(), player.getY()));
             player.setX(1000);
             player.setY(1000);
-            if(contFpsAfterGameOver >= fpsAfterGameOver){
+            gameOver();
+        }
+    }
+    public void gameOver(){
+        if(contFpsAfterGameOver >= fpsAfterGameOver){
                 window.dispose();
                 GameOver.getGameOver();
+//                if(!isOver)new StartMenu();
+//                isOver = true;
             }
-            else contFpsAfterGameOver++;
-            
-        }
+        else contFpsAfterGameOver++;
+        GameModel.writePoint();
     }
     
     public void userBulletsUpdate() {
@@ -124,19 +124,66 @@ public class GameState extends State {
 
     @Override
     public void update() {
-        checkCollisions();
-        playerUpdate();
-        enemiesUpdate();
-        userBulletsUpdate();
-        explosionsUpdate();
-        enemiesBulletsUpdate();
-        if(enemies.isEmpty()){
-            levelNumber++;
-            enemiesNumber += enemiesForRow;
-            initEnemies(enemiesNumber);
+        if(GameState.getHealth() > 0){
+            checkCollisions();
+            playerUpdate();
+            enemiesUpdate();
+            userBulletsUpdate();
+            explosionsUpdate();
+            enemiesBulletsUpdate();
+            if(enemies.isEmpty()){
+                enemiesNumber += enemiesForRow;
+                initLevel(enemiesNumber, levelNumber);
+                levelNumber++;
+            }
+        }else{
+            gameOver();
         }
     }
-
+    
+    public void initLevel(int enemiesNumber, int level){
+        if(level <= 4)initEnemiesEasy(enemiesNumber, level);
+        else if(level == 5) initEnemiesMedium(10);
+        else{
+            this.enemiesNumber = 0;
+            levelNumber = 0;
+        }
+    }
+    
+    public void initEnemiesEasy(int enemiesNumber, int type){
+        int y = 0;
+        for(int cont = 0; cont < enemiesNumber/enemiesForRow; cont++){
+            for(int x = 100; x < enemiesForRow*50+100; ) {
+                enemies.add(new Enemy((int) x, y, type));
+                x += 50;
+            }
+            y += 50;
+        }
+    }
+    
+    public void initEnemiesMedium(int enemiesNumber){
+        Random rand = new Random();
+        for(int cont = 0; cont < enemiesNumber; ){
+            int randomX = rand.nextInt((GameModel.getWIDTH()) + 1);
+            int randomY = rand.nextInt(100 + 1);
+            if(checkCoordinates(randomX, randomY)){
+                enemies.add(new Enemy((int) randomX , randomY, 2));
+                cont++;
+            }
+        }
+    }
+    
+    public boolean checkCoordinates(int x, int y){
+        for(Enemy e : enemies){
+            if(e.getX() < x && e.getX() + e.getWidth() > x){
+                if(e.getY() < y && e.getY() + e.getHeight() > y){
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+    
     @Override
     public void render(Graphics g) {
         player.render(g);
@@ -164,6 +211,7 @@ public class GameState extends State {
         for (Enemy enemy : enemies) {
         if(player.getX() >= enemy.getX() && player.getX() <= enemy.getX() + enemy.getHeight()){
                     if(player.getY() >= enemy.getY() && player.getY() <= enemy.getY() + enemy.getWidth()){
+                        //player.setHealth(Player.getHealth()-1);
                         player.setHealth(0);
                     }
                 }
@@ -199,5 +247,13 @@ public class GameState extends State {
     
     public static int getPoints(){
         return points;
+    }
+    
+    public static int getHealth(){
+        return stationHealth;
+    }
+    
+    public static void setHealth(int val){
+        stationHealth = val;
     }
 }

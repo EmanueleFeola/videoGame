@@ -67,7 +67,9 @@ public class GameModel implements Runnable{
     public void startWindow(){
         startMenu = new StartMenu();
         buttonManager = new ButtonManager(this, startMenu);
-        startMenu.getButton().addActionListener(buttonManager);
+        startMenu.getStartButton().addActionListener(buttonManager);
+        startMenu.getRankingButton().addActionListener(buttonManager);
+        startMenu.getExitButton().addActionListener(buttonManager);
     }
     
     public void init(){
@@ -106,7 +108,7 @@ public class GameModel implements Runnable{
         //Font font = g.getFont().deriveFont(20.0f);
         g.setColor(Color.white);
         g.setFont(new Font("TimesRoman", Font.PLAIN, 25));    
-        g.drawString("Vite: " + Player.getHealth(), 10 , 25);
+        g.drawString("Vita : " + GameState.getHealth(), 10 , 25);
         g.drawString("Punteggio : " + GameState.getPoints(), 10 , 50);
         //g.drawStr
         if(State.getState() != null) State.getState().render(g);
@@ -177,5 +179,9 @@ public class GameModel implements Runnable{
     
     public static boolean isBooldebug(){
         return booldebug;
+    }
+    
+    public static void writePoint(){
+        
     }
 }
