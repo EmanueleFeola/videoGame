@@ -1,3 +1,4 @@
+proiettili che partono dal centro esatto
 immagine nel menu ?
 gestione punteggio?
 suoni?
